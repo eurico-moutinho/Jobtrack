@@ -3,10 +3,27 @@ global using Microsoft.AspNetCore.Mvc;
 global using api.Models.Dto;
 global using Microsoft.AspNetCore.JsonPatch;
 global using api.Data;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+var config = builder.Configuration;
 
 // Add services to the container.
+
+builder.Services.AddAuthentication().AddJwtBearer(x =>
+{
+
+    var Key = Encoding.UTF8.GetBytes(config["JwtSettings:Key"]!);
+	x.SaveToken = true;
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        
+    };
+
+});
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

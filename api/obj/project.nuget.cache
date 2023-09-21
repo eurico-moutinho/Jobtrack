@@ -1,12 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "JHgnG/i0hltrNe5jbrM4M2MgTa+qww/eoFWp1ScvdF5X5XXO3I7jp/kIiG/F4qF2RfMprELGMKijsBpKDsDczg==",
+  "dgSpecHash": "5X04DOy3ELUqYACnIeCHvGcm1T6Z3V9alE84EnNnQJzcQwAHOJhKkN52ZD8Z03RWozcC7C0mEOaRxNxtdNS9fg==",
   "success": true,
   "projectFilePath": "d:\\git-practice\\Projects\\jobtrack\\api\\api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Eurico\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\Eurico\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
+    "C:\\Users\\Eurico\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\Eurico\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
+    "C:\\Users\\Eurico\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\7.0.11\\microsoft.aspnetcore.authentication.jwtbearer.7.0.11.nupkg.sha512",
     "C:\\Users\\Eurico\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\7.0.11\\microsoft.aspnetcore.jsonpatch.7.0.11.nupkg.sha512",
     "C:\\Users\\Eurico\\.nuget\\packages\\microsoft.aspnetcore.mvc.newtonsoftjson\\7.0.11\\microsoft.aspnetcore.mvc.newtonsoftjson.7.0.11.nupkg.sha512",
     "C:\\Users\\Eurico\\.nuget\\packages\\microsoft.aspnetcore.openapi\\7.0.11\\microsoft.aspnetcore.openapi.7.0.11.nupkg.sha512",

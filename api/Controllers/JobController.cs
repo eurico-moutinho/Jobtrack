@@ -1,7 +1,10 @@
+using Microsoft.AspNetCore.Authorization;
+
 namespace api.Controllers;
 
 [Route("api/Jobs")]
 [ApiController]
+[Authorize]
 public class JobController : ControllerBase
 {
     
