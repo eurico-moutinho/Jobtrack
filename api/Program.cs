@@ -1,5 +1,7 @@
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.AspNetCore.Mvc;
+global using api.Models.Dto;
+global using Microsoft.AspNetCore.JsonPatch;
 global using api.Data;
 
 var builder = WebApplication.CreateBuilder(args);

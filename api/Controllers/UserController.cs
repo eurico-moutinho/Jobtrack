@@ -1,6 +1,3 @@
-using api.Models.Dto;
-using Microsoft.AspNetCore.JsonPatch;
-
 namespace api.Controllers;
 
 [Route("api/User")]
