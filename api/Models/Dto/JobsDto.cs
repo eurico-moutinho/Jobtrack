@@ -11,4 +11,6 @@ public class JobsDto
     public string Company { get; set; } = string.Empty;
 
     public string Description { get; set; }  = string.Empty;
+
+    public DateTime Date { get; set; }
 }

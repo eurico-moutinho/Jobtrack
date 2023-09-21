@@ -7,6 +7,4 @@ public class JoblistDto
     public int JobId { get; set; }
 
     public int UserId { get; set; }
-
-    public DateTime Date { get; set; }
 }
