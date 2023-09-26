@@ -17,7 +17,7 @@ public class UserController : ControllerBase
 
     }
 
-    [HttpGet]
+    [HttpGet, Authorize]
     public ActionResult<IEnumerable<UserDto>> GetUser()
     {
 
@@ -25,7 +25,7 @@ public class UserController : ControllerBase
 
     }
 
-    [HttpGet("{id:int}", Name="GetUser")]
+    [HttpGet("{id:int}", Name="GetUser"), Authorize]
     public ActionResult<UserDto> GetUser(int id)
     {
         var user = _db.Users.FirstOrDefault( u => u.Id == id);
@@ -40,7 +40,7 @@ public class UserController : ControllerBase
         return Ok(user);
     }
 
-    [HttpPost]
+    [HttpPost, Authorize]
     public ActionResult<UserDto> CreateUser([FromBody] UserDto userDto)
     {
 
@@ -66,7 +66,7 @@ public class UserController : ControllerBase
 
     }
 
-    [HttpDelete]
+    [HttpDelete, Authorize]
     public ActionResult<UserDto> DeleteUser(int id)
     {
 
@@ -92,7 +92,7 @@ public class UserController : ControllerBase
 
     }
 
-    [HttpPut("{id:int}", Name = "UpdateUser")]
+    [HttpPut("{id:int}", Name = "UpdateUser"), Authorize]
     public IActionResult UpdateUser(int id, [FromBody]UserDto userDto)
     {
 
@@ -114,7 +114,7 @@ public class UserController : ControllerBase
         return NoContent();
     }
 
-    [HttpPatch("{id:int}", Name = "PatchUser")]
+    [HttpPatch("{id:int}", Name = "PatchUser"), Authorize]
     public IActionResult PatchUser(int id, JsonPatchDocument<UserDto> patchDto)
     {
 

@@ -14,7 +14,7 @@ var config = builder.Configuration;
 builder.Services.AddAuthentication().AddJwtBearer(x =>
 {
 
-    var Key = Encoding.UTF8.GetBytes(config["JwtSettings:Key"]!);
+    var Key = Encoding.UTF8.GetBytes(config["AppSettings:Token"]!);
 	x.SaveToken = true;
     x.TokenValidationParameters = new TokenValidationParameters
     {
