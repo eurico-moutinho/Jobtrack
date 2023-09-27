@@ -45,14 +45,16 @@ public class AuthController : ControllerBase
 
         string token = CreateToken(user);
 
-        return Ok(user);
+        return Ok(token);
     }
 
     private string CreateToken(Auth user)
     {
         List<Claim> claims = new List<Claim> {
 
-            new Claim(ClaimTypes.Name, user.Username)
+            new Claim(ClaimTypes.Name, user.Username),
+            new Claim(ClaimTypes.Role, "Admin"),
+            new Claim(ClaimTypes.Role, "User")
 
         };
 

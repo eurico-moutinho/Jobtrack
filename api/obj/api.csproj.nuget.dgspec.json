@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "d:\\git-practice\\Projects\\jobtrack\\api\\api.csproj": {}
+    "D:\\git-practice\\Projects\\jobtrack\\api\\api.csproj": {}
   },
   "projects": {
-    "d:\\git-practice\\Projects\\jobtrack\\api\\api.csproj": {
+    "D:\\git-practice\\Projects\\jobtrack\\api\\api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "d:\\git-practice\\Projects\\jobtrack\\api\\api.csproj",
+        "projectUniqueName": "D:\\git-practice\\Projects\\jobtrack\\api\\api.csproj",
         "projectName": "api",
-        "projectPath": "d:\\git-practice\\Projects\\jobtrack\\api\\api.csproj",
+        "projectPath": "D:\\git-practice\\Projects\\jobtrack\\api\\api.csproj",
         "packagesPath": "C:\\Users\\Eurico\\.nuget\\packages\\",
-        "outputPath": "d:\\git-practice\\Projects\\jobtrack\\api\\obj\\",
+        "outputPath": "D:\\git-practice\\Projects\\jobtrack\\api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Eurico\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -73,6 +73,10 @@
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.5.0, )"
+            },
+            "Swashbuckle.AspNetCore.Filters": {
+              "target": "Package",
+              "version": "[7.0.11, )"
             }
           },
           "imports": [

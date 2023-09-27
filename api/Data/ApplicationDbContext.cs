@@ -1,5 +1,3 @@
-using api.Models.Dto;
-
 namespace api.Data;
 
 public class ApplicationDbContext : DbContext
@@ -14,4 +12,6 @@ public class ApplicationDbContext : DbContext
     public DbSet<JobsDto> Jobs { get; set;}
 
     public DbSet<JoblistDto> Joblist { get; set;}
+
+    public DbSet<AuthDto> Auth { get; set;}
 }

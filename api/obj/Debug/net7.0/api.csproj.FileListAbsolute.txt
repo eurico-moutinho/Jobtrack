@@ -79,3 +79,7 @@ D:\git-practice\Projects\jobtrack\api\bin\Debug\net7.0\Microsoft.AspNetCore.Mvc.
 D:\git-practice\Projects\jobtrack\api\bin\Debug\net7.0\Newtonsoft.Json.dll
 D:\git-practice\Projects\jobtrack\api\bin\Debug\net7.0\Newtonsoft.Json.Bson.dll
 D:\git-practice\Projects\jobtrack\api\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\git-practice\Projects\jobtrack\api\bin\Debug\net7.0\BCrypt.Net-Next.dll
+D:\git-practice\Projects\jobtrack\api\bin\Debug\net7.0\Scrutor.dll
+D:\git-practice\Projects\jobtrack\api\bin\Debug\net7.0\Swashbuckle.AspNetCore.Filters.dll
+D:\git-practice\Projects\jobtrack\api\bin\Debug\net7.0\Swashbuckle.AspNetCore.Filters.Abstractions.dll

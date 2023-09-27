@@ -3,25 +3,15 @@ global using Microsoft.AspNetCore.Mvc;
 global using api.Models.Dto;
 global using Microsoft.AspNetCore.JsonPatch;
 global using api.Data;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
 
 // Add services to the container.
 
-builder.Services.AddAuthentication().AddJwtBearer(x =>
-{
-
-    var Key = Encoding.UTF8.GetBytes(config["AppSettings:Token"]!);
-	x.SaveToken = true;
-    x.TokenValidationParameters = new TokenValidationParameters
-    {
-        
-    };
-
-});
+builder.Services.AddAuthentication().AddJwtBearer();
 
 builder.Services.AddAuthorization();
 
@@ -32,7 +22,19 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<ApplicationDbContext>(options => 
                     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options => 
+{
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    {
+
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+
+    });
+
+    options.OperationFilter<SecurityRequirementsOperationFilter>();
+});
 
 var app = builder.Build();
 
