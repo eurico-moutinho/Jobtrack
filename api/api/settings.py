@@ -177,6 +177,25 @@ AUTH_PASSWORD_VALIDATORS = [
 
 ]
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',  # Change to 'INFO' for less detailed logs
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',  # You can specify the path to your log file
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',  # Change to 'INFO' for less detailed logs
+            'propagate': True,
+        },
+    },
+}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/

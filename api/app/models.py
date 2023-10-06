@@ -12,8 +12,8 @@ class User(models.Model):
         return self.username
 
 
-class Jobs(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL)
+class Job(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     company = models.CharField(max_length=200)
     title = models.CharField(max_length=200)
     description = models.CharField(max_length=3000, null=True, blank=True)

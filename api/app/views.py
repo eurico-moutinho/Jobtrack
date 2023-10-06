@@ -4,37 +4,45 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
 from .models import User, Job
 from .serializers import UserSerializer, JobSerializer
 from django.db.models import Q
 import bcrypt
-import requests
+import logging
 
 # Create your views here.
 
 
 @permission_classes([IsAuthenticated])
-class User(APIView):
+class UserView(APIView):
 
     def get(self, request):
 
         try:
-            user = User.objects.get(email=request.data['email'])
-            if bcrypt.checkpw(request.data(['password']).encode('utf8'), user.password.encode('utf8')):
+            user = User.objects.get(email=request.query_params.get('email'))
+
+            hash_password = bcrypt.hashpw(
+                request.query_params.get('password').encode('utf8'), bcrypt.gensalt(14))
+
+            if bcrypt.checkpw(hash_password, user.password.encode('utf8')):
 
                 serializer = UserSerializer(user, many=False)
 
-                return Response(serializer.data)
+                return Response({'data': serializer.data}, safe=False)
 
             else:
 
-                return JsonResponse('Wrong Password!')
+                return Response({'detail': 'Wrong Password!'}, status=status.HTTP_UNAUTHORIZED)
 
         except User.DoesNotExist:
 
-            raise JsonResponse('User doesn\'t exist')
+            return Response({'detail': 'User doesn\'t exist'})
 
     def post(self, request):
+
+        if User.objects.filter(email=request.data['email']).exists():
+            return Response('User with this email already exists', status=400)
 
         user = User.objects.create(
 
@@ -47,11 +55,11 @@ class User(APIView):
 
         serializer = UserSerializer(user)
 
-        return Response(serializer.data)
+        return Response({'data': serializer.data}, status=201)
 
     def put(self, request):
 
-        user = self.get_object(request.data['email'])
+        user = User.objects.get(email=request.data['email'])
         user.name = request.data['name']
         newEmail = request.data['newEmail']
 
@@ -69,14 +77,14 @@ class User(APIView):
 
     def delete(self, request):
 
-        user = self.get_object(request.data['email'])
+        user = User.objects.get(email=request.data['email'])
         user.delete()
 
         return JsonResponse('user deleted')
 
 
 @permission_classes([IsAuthenticated])
-class Job(APIView):
+class JobView(APIView):
 
     def get(self, request, id=None):
 
@@ -84,7 +92,7 @@ class Job(APIView):
 
             try:
 
-                jobs = Job.objects.get(user=request.data['user'])
+                jobs = Job.objects.filter(user=request.data['user'])
                 serializer = JobSerializer(jobs, many=True)
 
                 return Response(serializer.data)
@@ -98,7 +106,7 @@ class Job(APIView):
             try:
 
                 job = Job.objects.get(id=id)
-                serializer = JobSerializer(job, many=True)
+                serializer = JobSerializer(job, many=False)
 
                 return Response(serializer.data)
 
@@ -119,7 +127,7 @@ class Job(APIView):
 
         )
 
-        serializer = UserSerializer(job)
+        serializer = JobSerializer(job)
 
         return Response(serializer.data)
 
@@ -132,7 +140,7 @@ class Job(APIView):
         job.dateapplied = request.data['dateapplied']
         job.urllink = request.data['urllink']
 
-        serializer = UserSerializer(job, many=False)
+        serializer = JobSerializer(job, many=False)
 
         return Response(serializer.data)
 
