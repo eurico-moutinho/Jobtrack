@@ -9,7 +9,6 @@ from .models import User, Job
 from .serializers import UserSerializer, JobSerializer
 from django.db.models import Q
 import bcrypt
-import logging
 
 # Create your views here.
 
@@ -19,11 +18,14 @@ class UserView(APIView):
 
     def get(self, request):
 
+        email = request.data.get('email')
+        password = request.data.get('password')
+
         try:
-            user = User.objects.get(email=request.query_params.get('email'))
+            user = User.objects.get(Q(email__iexact=email))
 
             hash_password = bcrypt.hashpw(
-                request.query_params.get('password').encode('utf8'), bcrypt.gensalt(14))
+                password.encode('utf8'), bcrypt.gensalt(14))
 
             if bcrypt.checkpw(hash_password, user.password.encode('utf8')):
 
@@ -41,7 +43,7 @@ class UserView(APIView):
 
     def post(self, request):
 
-        if User.objects.filter(email=request.data['email']).exists():
+        if User.objects.filter(Q(email__iexact=request.data['email'])).exists():
             return Response('User with this email already exists', status=400)
 
         user = User.objects.create(
@@ -59,7 +61,7 @@ class UserView(APIView):
 
     def put(self, request):
 
-        user = User.objects.get(email=request.data['email'])
+        user = User.objects.get(Q(email__iexact=request.data['email']))
         user.name = request.data['name']
         newEmail = request.data['newEmail']
 
