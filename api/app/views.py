@@ -12,6 +12,8 @@ import bcrypt
 
 # Create your views here.
 
+salt = bcrypt.gensalt(14)
+
 
 @permission_classes([IsAuthenticated])
 class UserView(APIView):
@@ -19,23 +21,20 @@ class UserView(APIView):
     def get(self, request):
 
         email = request.data.get('email')
-        password = request.data.get('password')
+        password = request.data.get('password').encode('utf8')
 
         try:
             user = User.objects.get(Q(email__iexact=email))
 
-            hash_password = bcrypt.hashpw(
-                password.encode('utf8'), bcrypt.gensalt(14))
-
-            if bcrypt.checkpw(hash_password, user.password.encode('utf8')):
+            if bcrypt.checkpw(password, user.password.encode('utf8')):
 
                 serializer = UserSerializer(user, many=False)
 
-                return Response({'data': serializer.data}, safe=False)
+                return Response({'data': serializer.data})
 
             else:
 
-                return Response({'detail': 'Wrong Password!'}, status=status.HTTP_UNAUTHORIZED)
+                return Response({'detail': 'Wrong Password!'})
 
         except User.DoesNotExist:
 
@@ -46,12 +45,14 @@ class UserView(APIView):
         if User.objects.filter(Q(email__iexact=request.data['email'])).exists():
             return Response('User with this email already exists', status=400)
 
+        pwhash = bcrypt.hashpw(
+            request.data['password'].encode('utf8'), salt)
+
         user = User.objects.create(
 
             name=request.data['name'],
             email=request.data['email'],
-            password=bcrypt.hashpw(
-                request.data['password'].encode('utf8'), bcrypt.gensalt(14)),
+            password=pwhash.decode('utf8'),
 
         )
 
@@ -82,7 +83,7 @@ class UserView(APIView):
         user = User.objects.get(email=request.data['email'])
         user.delete()
 
-        return JsonResponse('user deleted')
+        return Response('user deleted')
 
 
 @permission_classes([IsAuthenticated])
@@ -101,7 +102,7 @@ class JobView(APIView):
 
             except Job.DoesNotExist:
 
-                raise JsonResponse('No jobs added')
+                return Response('No jobs added')
 
         else:
 
@@ -114,7 +115,7 @@ class JobView(APIView):
 
             except Job.DoesNotExist:
 
-                raise JsonResponse('No job found')
+                return Response('No job found')
 
     def post(self, request):
 
@@ -151,4 +152,4 @@ class JobView(APIView):
         user = self.get_object(id)
         user.delete()
 
-        return JsonResponse('job deleted')
+        return Response('job deleted')
