@@ -1,13 +1,11 @@
-from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.db.models import Q
-from django.contrib.auth import authenticate, login, logout
+from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.authtoken.models import Token
+from rest_framework_simplejwt.tokens import RefreshToken
 from .models import User, Job
 from .serializers import UserSerializer, JobSerializer
 import bcrypt
@@ -20,27 +18,30 @@ salt = bcrypt.gensalt(14)
 @api_view(['POST'])
 def login(request):
 
-    email = request.POST.get('email')
-    password = request.POST.get('password').encode('utf8')
+    email = request.data.get('email')
+    password = request.data.get('password').encode('utf8')
 
-    user = authenticate(request, username=email, password=password)
+    try:
 
-    if user is not None:
+        user = User.objects.get(Q(email__iexact=email))
 
-        login(request, user)
-        token, created = Token.objects.get_or_create(user=user)
+        if bcrypt.checkpw(password, user.password.encode('utf8')):
 
-        return Response({'detail': 'Login successful', 'token': token.key}, status=200)
+            token = RefreshToken.for_user(user)
+            return Response({'detail': 'Login successful', 'refresh': str(token), 'token': str(token.access_token)}, status=200)
 
-    else:
+        else:
+            return Response({'detail': 'Wrong Email or Password!'}, status=401)
 
-        return Response({'detail': 'Wrong Email or Password!'}, status=401)
+    except User.DoesNotExist:
+
+        return Response({'detail': 'User not found'}, status=401)
 
 
 @api_view(['POST'])
 @login_required(login_url='login')
 def logout_view(request):
-    logout(request)
+
     return Response({'detail': 'Logout successful'})
 
 
@@ -64,7 +65,7 @@ def register(request):
     return Response(status=201)
 
 
-@login_required(login_url='login')
+@method_decorator(login_required, name='dispatch')
 class UserView(APIView):
 
     def get(self, request):
@@ -102,7 +103,7 @@ class UserView(APIView):
         return Response('user deleted')
 
 
-@login_required(login_url='login')
+@method_decorator(login_required, name='dispatch')
 class JobView(APIView):
 
     def get(self, request, id=None):
