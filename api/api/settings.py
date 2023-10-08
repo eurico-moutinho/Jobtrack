@@ -177,6 +177,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 ]
 
+AUTHENTICATION_BACKENDS = [
+
+    'app.backends.BcryptAuthBackend'
+
+]
+
+
 # LOGGING = {
 #     'version': 1,
 #     'disable_existing_loggers': False,
