@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django.db.models import Q
+from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -145,9 +146,11 @@ class JobView(APIView):
 
     def post(self, request):
 
+        user_id = request.data['userId']
+
         job = Job.objects.create(
 
-            user=request.data['userId'],
+            user=get_object_or_404(User, pk=user_id),
             company=request.data['company'],
             title=request.data['title'],
             description=request.data['description'],
