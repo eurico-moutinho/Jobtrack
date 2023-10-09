@@ -6,7 +6,7 @@ class UserSerializer(ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['name', 'email']
+        fields = ['id', 'name', 'email']
 
 
 class JobSerializer(ModelSerializer):

@@ -1,8 +1,7 @@
 from django.http import JsonResponse
 from django.db.models import Q
-from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import login_required
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -13,6 +12,17 @@ import bcrypt
 # Create your views here.
 
 salt = bcrypt.gensalt(14)
+
+
+def get_tokens_for_user(user):
+
+    refresh = RefreshToken.for_user(user)
+    return {
+
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+
+    }
 
 
 @api_view(['POST'])
@@ -27,8 +37,14 @@ def login(request):
 
         if bcrypt.checkpw(password, user.password.encode('utf8')):
 
-            token = RefreshToken.for_user(user)
-            return Response({'detail': 'Login successful', 'refresh': str(token), 'token': str(token.access_token)}, status=200)
+            token = get_tokens_for_user(user)
+
+            return Response({
+
+                'detail': 'Login successful',
+                'token': token,
+
+            }, status=200)
 
         else:
             return Response({'detail': 'Wrong Email or Password!'}, status=401)
@@ -36,13 +52,6 @@ def login(request):
     except User.DoesNotExist:
 
         return Response({'detail': 'User not found'}, status=401)
-
-
-@api_view(['POST'])
-@login_required(login_url='login')
-def logout_view(request):
-
-    return Response({'detail': 'Logout successful'})
 
 
 @api_view(['POST'])
@@ -65,7 +74,7 @@ def register(request):
     return Response(status=201)
 
 
-@method_decorator(login_required, name='dispatch')
+@permission_classes([IsAuthenticated])
 class UserView(APIView):
 
     def get(self, request):
@@ -103,7 +112,7 @@ class UserView(APIView):
         return Response('user deleted')
 
 
-@method_decorator(login_required, name='dispatch')
+@permission_classes([IsAuthenticated])
 class JobView(APIView):
 
     def get(self, request, id=None):
