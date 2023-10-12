@@ -3,7 +3,7 @@ import styles from '../../../styles/globals.module.sass'
 function Template({ children }) {
 
     return (
-        <div className={styles.login}>
+        <div className={styles.auth}>
             <span></span>
             <span></span>
             <span></span>
