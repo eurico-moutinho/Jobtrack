@@ -5,7 +5,10 @@ function Template({ changeFn }) {
     return (
 
         <form className={styles.signingForm}>
-            <h2>Login</h2>
+            <h2>Register</h2>
+            <div className={styles.inputBox}>
+                <input type='text' placeholder='Name' />
+            </div>
             <div className={styles.inputBox}>
                 <input type='text' placeholder='Email' />
             </div>
@@ -13,11 +16,13 @@ function Template({ changeFn }) {
                 <input type='text' placeholder='Password' />
             </div>
             <div className={styles.inputBox}>
-                <Link href='#'>Forgot Password</Link>
-                <Link href='#' onClick={() => changeFn('register')} id='signup'>Signup</Link>
+                <input type='text' placeholder='Confirm Password' />
             </div>
             <div className={styles.inputBox}>
-                <input type='submit' value="Sign in" />
+                <Link href='#' onClick={() => changeFn('login')} id='signup'>Login</Link>
+            </div>
+            <div className={styles.inputBox}>
+                <input type='submit' value="Register" />
             </div>
         </form>
 

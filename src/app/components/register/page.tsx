@@ -1,13 +1,13 @@
 import React from 'react'
 import Template from './pageTemplate'
 
-interface LoginProps {
+interface RegisterProps {
 
     changeFn: (page: string) => void;
 
 }
 
-const Login: React.FC<LoginProps> = ({ changeFn }) => {
+const Register: React.FC<RegisterProps> = ({ changeFn }) => {
 
     return (
 
@@ -16,4 +16,4 @@ const Login: React.FC<LoginProps> = ({ changeFn }) => {
     )
 }
 
-export default Login
+export default Register

@@ -1,11 +1,14 @@
-import Image from 'next/image'
 import styles from './page.module.css'
-import Login from './components/login/page'
+import Authentication from './components/authentication/page'
 
-export default function Home() {
+const Home: React.FC = () => {
   return (
+
     <main className={styles.main}>
-      <Login />
+      <Authentication />
     </main>
+
   )
 }
+
+export default Home;
