@@ -13,7 +13,7 @@ function Template({ changeFn }) {
                 <input type='text' placeholder='Password' />
             </div>
             <div className={styles.inputBox}>
-                <Link href='#'>Forgot Password</Link>
+                <Link href='#' onClick={() => changeFn('forgotPass')}>Forgot Password</Link>
                 <Link href='#' onClick={() => changeFn('register')}>Signup</Link>
             </div>
             <div className={styles.inputBox}>

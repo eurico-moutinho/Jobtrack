@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import Template from './pageTemplate'
 import Login from '../login/page'
 import Register from '../register/page'
+import ForgotPass from '../forgotpass/page';
 
 const Authentication: React.FC = () => {
 
@@ -18,7 +19,7 @@ const Authentication: React.FC = () => {
 
         <Template>
 
-            {form === 'login' ? <Login changeFn={changeForm} /> : <Register changeFn={changeForm} />}
+            {form === 'login' ? <Login changeFn={changeForm} /> : form === 'register' ? <Register changeFn={changeForm} /> : <ForgotPass changeFn={changeForm} />}
 
         </Template>
 

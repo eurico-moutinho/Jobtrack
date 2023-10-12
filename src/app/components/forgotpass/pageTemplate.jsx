@@ -7,19 +7,10 @@ function Template({ changeFn }) {
         <form className={styles.register}>
             <h2>Registration</h2>
             <div className={styles.inputBox}>
-                <input type='text' placeholder='Name' />
-            </div>
-            <div className={styles.inputBox}>
                 <input type='text' placeholder='Email' />
             </div>
             <div className={styles.inputBox}>
-                <input type='text' placeholder='Password' />
-            </div>
-            <div className={styles.inputBox}>
-                <input type='text' placeholder='Confirm Password' />
-            </div>
-            <div className={styles.inputBox}>
-                <input type='submit' value="Register Account" />
+                <input type='submit' value="Recover Password" />
             </div>
             <div className={styles.inputBox}>
                 <Link href='#' onClick={() => changeFn('login')} >Already Have an Account? <b>Login</b></Link>
