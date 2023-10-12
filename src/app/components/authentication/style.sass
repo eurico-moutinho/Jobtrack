@@ -28,7 +28,7 @@
             content: ''
             position: absolute
             inset: 5px
-            background-color: lightblue
+            background-color: darkblue
             filter: blur(10px)
 
         &::after
@@ -36,56 +36,6 @@
             position: absolute
             inset: 5px
             filter: blur(15px)
-
-    form
-        position: absolute
-        left: 0
-        display: flex
-        justify-content: center
-        align-items: center
-        flex-direction: column
-        width: 100%
-        gap: 15px
-        transition: 0.5s
-
-        h2
-            position: relative
-            color: white
-            font-size: 1.5em
-            letter-spacing: 0.1em
-            text-transform: uppercase
-            margin-bottom: 10px
-
-        .inputBox
-            position: relative
-            width: 70%
-            display: flex
-            justify-content: space-between
-
-            a
-                color: white
-                font-size: 0.85em
-
-                &:nth-child(2)
-                    text-decoration: underline
-
-            input
-                width: 100%
-                outline: none
-                border: 1px solid rgba(255, 255, 255, 0.25)
-                background: rgba(0, 0, 0, 0.15)
-                padding: 6px 15px
-                border-radius: 4px
-                font-size: 0.85em
-                color: white
-
-                &::placeholder
-                    color: rgba(255, 255, 255, 0.5)
-
-                &[type="submit"]
-                    background: #2196f3
-                    font-weight: 500
-                    cursor: pointer
                     
 
 @property --a

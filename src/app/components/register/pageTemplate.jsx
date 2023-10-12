@@ -4,8 +4,8 @@ import Link from 'next/link'
 function Template({ changeFn }) {
     return (
 
-        <form className={styles.signingForm}>
-            <h2>Register</h2>
+        <form className={styles.register}>
+            <h2>Registration</h2>
             <div className={styles.inputBox}>
                 <input type='text' placeholder='Name' />
             </div>
@@ -19,10 +19,10 @@ function Template({ changeFn }) {
                 <input type='text' placeholder='Confirm Password' />
             </div>
             <div className={styles.inputBox}>
-                <Link href='#' onClick={() => changeFn('login')} id='signup'>Login</Link>
+                <Link href='#' onClick={() => changeFn('login')} >Already Have an Account? <b>Login</b></Link>
             </div>
             <div className={styles.inputBox}>
-                <input type='submit' value="Register" />
+                <input type='submit' value="Register Account" />
             </div>
         </form>
 
