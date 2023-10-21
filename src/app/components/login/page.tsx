@@ -1,5 +1,7 @@
 import React from 'react'
 import Template from './pageTemplate'
+import { useSession } from 'next-auth/react'
+import { redirect } from 'next/navigation'
 
 interface LoginProps {
 
@@ -8,6 +10,8 @@ interface LoginProps {
 }
 
 const Login: React.FC<LoginProps> = ({ changeFn }) => {
+
+    const { data: session } = useSession()
 
     return (
 

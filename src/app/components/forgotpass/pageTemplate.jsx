@@ -1,11 +1,11 @@
-import styles from '../../../styles/globals.module.sass'
+import styles from '../../../styles/login.module.sass'
 import Link from 'next/link'
 
 function Template({ changeFn }) {
     return (
 
-        <form className={styles.register}>
-            <h2>Registration</h2>
+        <form className={styles.login}>
+            <h2>Recover Password</h2>
             <div className={styles.inputBox}>
                 <input type='text' placeholder='Email' />
             </div>
