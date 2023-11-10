@@ -1,7 +1,6 @@
-import React, { useState, FormEvent } from 'react'
+import React, { useState, FormEvent, useRef } from 'react'
 import Template from './pageTemplate'
-import { useSession } from 'next-auth/react'
-import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation';
 
 interface LoginProps {
 
@@ -11,23 +10,44 @@ interface LoginProps {
 
 const Login: React.FC<LoginProps> = ({ changeFn }) => {
 
-    const [email, setEmail] = useState<String>('');
-    const [password, setPassword] = useState<String>('');
+    const emailRef = useRef<HTMLInputElement>(null);
+    const passwordRef = useRef<HTMLInputElement>(null);
+    const router = useRouter();
 
     const onSubmit = (event: FormEvent<HTMLFormElement>):void => {
 
         event.preventDefault();
 
-        fetch('http://127.0.0.1:8000/login/', {
+        const secretKey = process.env.NEXT_PUBLIC_API_URL;
+
+        fetch(`${secretKey}/login/`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                email,
-                password,
+                email: emailRef.current?.value,
+                password: passwordRef.current?.value,
             })
-        }).then( req => console.log(req));
+        }).then(res => {
+
+            if (res.ok) {
+
+              return res.json();
+
+            } else {
+
+              throw new Error('Invalid login');
+
+            }
+
+        }).then(res => {
+
+            console.log(res.token.access);
+
+            router.push('/joblist');
+
+        }).catch(e => console.log(e));
 
     };
 
@@ -36,10 +56,8 @@ const Login: React.FC<LoginProps> = ({ changeFn }) => {
         <Template
             changeFn={changeFn}
             onSubmit={onSubmit}
-            setEmail={setEmail}
-            setPassword={setPassword}
-            email={email}
-            password={password}
+            emailRef={emailRef}
+            passwordRef={passwordRef}
         />
 
     )

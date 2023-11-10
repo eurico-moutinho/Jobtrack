@@ -73,7 +73,7 @@ def register(request):
 
     )
 
-    return Response(status=201)
+    return Response({'detail': 'User Created'},status=201)
 
 
 @permission_classes([IsAuthenticated])

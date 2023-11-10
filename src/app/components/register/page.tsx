@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from 'react'
+import React, { useState, FormEvent, useRef } from 'react'
 import Template from './pageTemplate'
 
 interface RegisterProps {
@@ -9,22 +9,26 @@ interface RegisterProps {
 
 const Register: React.FC<RegisterProps> = ({ changeFn }) => {
 
-    const [name, setName] = useState<string>('');
-    const [email, setEmail] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
-    const [confirmPassword, setConfirmPassword] = useState<string>('');
+    const nameRef = useRef<HTMLInputElement>(null);
+    const emailRef = useRef<HTMLInputElement>(null);
+    const passwordRef = useRef<HTMLInputElement>(null);
+    const confirmPasswordRef = useRef<HTMLInputElement>(null);
 
     const onSubmit = (event: FormEvent<HTMLFormElement>): void => {
         
         event.preventDefault();
 
-        fetch('http://127.0.0.1:8000/register/', {
+        const secretKey = process.env.NEXT_PUBLIC_API_URL;
+
+        fetch(`${secretKey}/register/`, {
             method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
             body: JSON.stringify({
-                name,
-                email,
-                password,
-                confirmPassword,
+                name: nameRef.current?.value,
+                email: emailRef.current?.value,
+                password: passwordRef.current?.value,
             })
         }).then( req => console.log(req));
 
@@ -35,14 +39,10 @@ const Register: React.FC<RegisterProps> = ({ changeFn }) => {
         <Template
             changeFn={changeFn}
             onSubmit={onSubmit}
-            setName={setName}
-            setEmail={setEmail}
-            setPassword={setPassword}
-            setConfirmPassword={setConfirmPassword}
-            name={name}
-            email={email}
-            password={password}
-            confirmPassword={confirmPassword}
+            nameRef={nameRef}
+            emailRef={emailRef}
+            passwordRef={passwordRef}
+            confirmPasswordRef={confirmPasswordRef}
         />
 
     )

@@ -1,22 +1,22 @@
 import styles from '../../../styles/login.module.sass'
 import Link from 'next/link'
 
-function Template({ changeFn, onSubmit, setName, setEmail, setPassword, setConfirmPassword, name, email, password, confirmPassword }) {
+function Template({ changeFn, onSubmit, nameRef, emailRef, passwordRef, confirmPasswordRef }) {
     return (
 
         <form className={styles.login} onSubmit={onSubmit}>
             <h2>Registration</h2>
             <div className={styles.inputBox}>
-                <input type='text' placeholder='Name' value={name} onChange={(e) => setName(e.target.value)} />
+                <input type='text' placeholder='Name' ref={nameRef} />
             </div>
             <div className={styles.inputBox}>
-                <input type='text' placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)} />
+                <input type='text' placeholder='Email' ref={emailRef} />
             </div>
             <div className={styles.inputBox}>
-                <input type='password' placeholder='Password' value={password} onChange={(e) => setPassword(e.target.value)} />
+                <input type='password' placeholder='Password' ref={passwordRef} />
             </div>
             <div className={styles.inputBox}>
-                <input type='password' placeholder='Confirm Password' value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+                <input type='password' placeholder='Confirm Password' ref={confirmPasswordRef} />
             </div>
             <div className={styles.inputBox}>
                 <input type='submit' value="Register Account" />
