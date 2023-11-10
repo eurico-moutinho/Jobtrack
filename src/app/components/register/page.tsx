@@ -1,4 +1,4 @@
-import React, { useState, FormEvent, useRef } from 'react'
+import React, { FormEvent, useEffect, useRef } from 'react'
 import Template from './pageTemplate'
 
 interface RegisterProps {
@@ -13,6 +13,13 @@ const Register: React.FC<RegisterProps> = ({ changeFn }) => {
     const emailRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
     const confirmPasswordRef = useRef<HTMLInputElement>(null);
+    const abortController = new AbortController();
+
+    useEffect(() => {
+        return () => {
+          abortController.abort();
+        };
+      }, []);
 
     const onSubmit = (event: FormEvent<HTMLFormElement>): void => {
         
@@ -21,6 +28,7 @@ const Register: React.FC<RegisterProps> = ({ changeFn }) => {
         const secretKey = process.env.NEXT_PUBLIC_API_URL;
 
         fetch(`${secretKey}/register/`, {
+            signal: abortController.signal,
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

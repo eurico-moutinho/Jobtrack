@@ -1,4 +1,4 @@
-import React, { useState, FormEvent, useRef } from 'react'
+import React, { FormEvent, useEffect, useRef } from 'react'
 import Template from './pageTemplate'
 import { useRouter } from 'next/navigation';
 
@@ -13,6 +13,13 @@ const Login: React.FC<LoginProps> = ({ changeFn }) => {
     const emailRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
     const router = useRouter();
+    const abortController = new AbortController();
+
+    useEffect(() => {
+        return () => {
+          abortController.abort();
+        };
+      }, []);
 
     const onSubmit = (event: FormEvent<HTMLFormElement>):void => {
 
@@ -21,6 +28,7 @@ const Login: React.FC<LoginProps> = ({ changeFn }) => {
         const secretKey = process.env.NEXT_PUBLIC_API_URL;
 
         fetch(`${secretKey}/login/`, {
+            signal: abortController.signal,
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
