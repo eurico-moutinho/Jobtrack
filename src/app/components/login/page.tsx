@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useRef } from 'react'
+import React, { FormEvent, useRef } from 'react'
 import Template from './pageTemplate'
 import { useRouter } from 'next/navigation';
 
@@ -13,30 +13,41 @@ const Login: React.FC<LoginProps> = ({ changeFn }) => {
     const emailRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
     const router = useRouter();
-    const abortController = new AbortController();
-
-    useEffect(() => {
-        return () => {
-          abortController.abort();
-        };
-      }, []);
 
     const onSubmit = (event: FormEvent<HTMLFormElement>):void => {
 
         event.preventDefault();
 
+        sendData();
+
+    };
+
+    const sendData = () => {
+
         const secretKey = process.env.NEXT_PUBLIC_API_URL;
 
+        interface Params {
+
+            email: string | undefined,
+            password: string | undefined
+
+        }
+
+        const params: Params = {
+            
+            email: emailRef.current?.value,
+            password: passwordRef.current?.value,
+
+        }
+
         fetch(`${secretKey}/login/`, {
-            signal: abortController.signal,
+
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                email: emailRef.current?.value,
-                password: passwordRef.current?.value,
-            })
+            body: JSON.stringify(params)
+
         }).then(res => {
 
             if (res.ok) {
@@ -55,9 +66,9 @@ const Login: React.FC<LoginProps> = ({ changeFn }) => {
 
             router.push('/joblist');
 
-        }).catch(e => console.log(e));
+        }).catch(e => console.error('Error:', e));
 
-    };
+    }
 
     return (
 

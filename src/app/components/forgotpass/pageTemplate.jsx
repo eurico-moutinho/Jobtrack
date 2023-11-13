@@ -12,7 +12,7 @@ function Template({ changeFn }) {
             <div className={styles.inputBox}>
                 <input type='submit' value="Recover Password" />
             </div>
-            <div className={styles.inputBox}>
+            <div className={styles.inputForm}>
                 <Link href='#' onClick={() => changeFn('login')} >Already Have an Account? <b>Login</b></Link>
             </div>
         </form>

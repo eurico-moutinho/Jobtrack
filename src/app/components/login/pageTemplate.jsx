@@ -12,7 +12,7 @@ function Template({ changeFn, onSubmit, emailRef, passwordRef }) {
             <div className={styles.inputBox}>
                 <input type='password' placeholder='Password' ref={passwordRef} />
             </div>
-            <div className={styles.inputBox}>
+            <div className={styles.inputForm}>
                 <Link href='#' onClick={() => changeFn('forgotPass')}>Forgot Password</Link>
                 <Link href='#' onClick={() => changeFn('register')}>Signup</Link>
             </div>

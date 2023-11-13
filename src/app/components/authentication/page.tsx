@@ -17,7 +17,7 @@ const Authentication: React.FC = () => {
 
     return (
 
-        <Template>
+        <Template form={form}>
 
             {form === 'login' ? <Login changeFn={changeForm} /> : form === 'register' ? <Register changeFn={changeForm} /> : <ForgotPass changeFn={changeForm} />}
 
