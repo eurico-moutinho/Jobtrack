@@ -1,10 +1,19 @@
 import React, { FormEvent, useState, useRef } from 'react'
 import Template from './pageTemplate'
-import {emailValidator, passwordValidator, passwordComparison} from '@/app/services/validator.service';
+import {emailValidator, passwordValidator, passwordComparison} from '@/app/services/validator.service'
+import { useMutation } from 'react-query'
 
 interface RegisterProps {
 
     changeFn: (page: string) => void;
+
+}
+
+interface Params {
+
+    name: string | undefined,
+    email: string | undefined,
+    password: string | undefined,
 
 }
 
@@ -19,12 +28,51 @@ const Register: React.FC<RegisterProps> = ({ changeFn }) => {
     const [passwordError, setPasswordError] = useState<Boolean>(false);
     const [passwordSim, setPasswordSim] = useState<Boolean>(false);
 
+    const registerMutation = useMutation((params: Params) => {
+
+      const secretKey = process.env.NEXT_PUBLIC_API_URL;
+  
+      return fetch(`${secretKey}/register/`, {
+
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(params),
+        
+      }).then((res) => {
+
+        if (res.ok) {
+
+          return res.json();
+
+        } else {
+
+          throw new Error('Registration failed');
+
+        }
+      });
+
+    });
+
 
     const onSubmit = (event: FormEvent<HTMLFormElement>): void => {
         
         event.preventDefault();
 
-        console.log(typeof(nameRef));
+        fetchData();
+
+    };
+
+    const fetchData = ():void => {
+
+        const params: Params = {
+
+            name: nameRef.current?.value,
+            email: emailRef.current?.value,
+            password: passwordRef.current?.value,
+
+        }
 
         const validateEmail: boolean = emailValidator(emailRef.current?.value);
 
@@ -36,7 +84,7 @@ const Register: React.FC<RegisterProps> = ({ changeFn }) => {
 
         if(validateEmail && validatePassword){
 
-            fetchData();
+            registerMutation.mutate(params);
 
         }else if(!validateEmail && !validatePassword){
 
@@ -53,47 +101,6 @@ const Register: React.FC<RegisterProps> = ({ changeFn }) => {
             setEmailError(true);
 
         }
-
-    };
-
-    const fetchData = ():void => {
-
-        const secretKey = process.env.NEXT_PUBLIC_API_URL;        
-
-        interface Params {
-
-            name: string | undefined,
-            email: string | undefined,
-            password: string | undefined,
-
-        }
-
-        const params: Params = {
-
-            name: nameRef.current?.value,
-            email: emailRef.current?.value,
-            password: passwordRef.current?.value,
-
-        }
-
-        fetch(`${secretKey}/register/`, {
-
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(params)
-
-        }).then( req => {
-
-            req.ok ? (changeFn('login'), setEmailError(false)) : setEmailError(true);
-
-        })
-        .catch((error) => {
-
-          console.error('Error:', error);
-
-        });
     };
 
     return (

@@ -1,10 +1,18 @@
 import React, { FormEvent, useRef } from 'react'
 import Template from './pageTemplate'
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation'
+import { useMutation } from 'react-query'
 
 interface LoginProps {
 
     changeFn: (page: string) => void;
+
+}
+
+interface Params {
+
+    email: string | undefined,
+    password: string | undefined
 
 }
 
@@ -14,24 +22,41 @@ const Login: React.FC<LoginProps> = ({ changeFn }) => {
     const passwordRef = useRef<HTMLInputElement>(null);
     const router = useRouter();
 
+    const loginMutation = useMutation((params: Params) => {
+
+      const secretKey = process.env.NEXT_PUBLIC_API_URL;
+  
+      return fetch(`${secretKey}/login/`, {
+
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(params),
+        
+      }).then((res) => {
+
+        if (res.ok) {
+
+          return res.json();
+
+        } else {
+
+          throw new Error('Invalid login');
+          
+        }
+      });
+    });
+
     const onSubmit = (event: FormEvent<HTMLFormElement>):void => {
 
         event.preventDefault();
 
-        sendData();
+        fetchProfile();
 
     };
 
-    const sendData = () => {
-
-        const secretKey = process.env.NEXT_PUBLIC_API_URL;
-
-        interface Params {
-
-            email: string | undefined,
-            password: string | undefined
-
-        }
+    const fetchProfile = ():void => {
 
         const params: Params = {
             
@@ -40,35 +65,15 @@ const Login: React.FC<LoginProps> = ({ changeFn }) => {
 
         }
 
-        fetch(`${secretKey}/login/`, {
+        loginMutation.mutate(params);
 
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(params)
+        if (loginMutation.isSuccess) {
 
-        }).then(res => {
-
-            if (res.ok) {
-
-              return res.json();
-
-            } else {
-
-              throw new Error('Invalid login');
-
-            }
-
-        }).then(res => {
-
-            console.log(res.token.access);
-
+            console.log(loginMutation.data?.token.access);
             router.push('/joblist');
 
-        }).catch(e => console.error('Error:', e));
-
-    }
+        }
+    };
 
     return (
 

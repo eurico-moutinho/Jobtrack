@@ -4,8 +4,11 @@ import Template from './pageTemplate'
 import Login from '../login/page'
 import Register from '../register/page'
 import ForgotPass from '../forgotpass/page';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 const Authentication: React.FC = () => {
+
+    const queryClient = new QueryClient();
 
     const [form, setForm] = useState<string>('login');
 
@@ -16,12 +19,15 @@ const Authentication: React.FC = () => {
     }
 
     return (
+        <QueryClientProvider client={queryClient}>
 
-        <Template form={form}>
+            <Template form={form}>
 
-            {form === 'login' ? <Login changeFn={changeForm} /> : form === 'register' ? <Register changeFn={changeForm} /> : <ForgotPass changeFn={changeForm} />}
+                {form === 'login' ? <Login changeFn={changeForm} /> : form === 'register' ? <Register changeFn={changeForm} /> : <ForgotPass changeFn={changeForm} />}
 
-        </Template>
+            </Template>
+
+        </QueryClientProvider>
 
     )
 }
