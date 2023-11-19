@@ -17,7 +17,7 @@ const passwordValidator = (password: string | undefined):boolean => {
 
 const passwordComparison = (pass: string | undefined, confirm: string | undefined) => {
 
-    return pass === confirm ? true : false;
+    return pass === confirm;
 
 };
 

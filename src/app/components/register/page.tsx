@@ -1,123 +1,113 @@
 import React, { FormEvent, useState, useRef } from 'react'
 import Template from './pageTemplate'
 import {emailValidator, passwordValidator, passwordComparison} from '@/app/services/validator.service'
-import { useMutation } from 'react-query'
+import { regMutation } from '@/app/services/mutationReg.service';
 
 interface RegisterProps {
 
-    changeFn: (page: string) => void;
+  changeFn: (page: string) => void;
 
 }
 
 interface Params {
 
-    name: string | undefined,
-    email: string | undefined,
-    password: string | undefined,
+  name: string | undefined,
+  email: string | undefined,
+  password: string | undefined,
 
 }
 
 const Register: React.FC<RegisterProps> = ({ changeFn }) => {
 
-    const nameRef = useRef<HTMLInputElement>(null);
-    const emailRef = useRef<HTMLInputElement>(null);
-    const passwordRef = useRef<HTMLInputElement>(null);
-    const confirmPasswordRef = useRef<HTMLInputElement>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const confirmPasswordRef = useRef<HTMLInputElement>(null);
 
-    const [emailError, setEmailError] = useState<Boolean>(false);
-    const [passwordError, setPasswordError] = useState<Boolean>(false);
-    const [passwordSim, setPasswordSim] = useState<Boolean>(false);
+  const [emailError, setEmailError] = useState<Boolean>(false);
+  const [passwordError, setPasswordError] = useState<Boolean>(false);
+  const [passwordSim, setPasswordSim] = useState<Boolean>(false);
 
-    const registerMutation = useMutation((params: Params) => {
+  const params: Params = {
 
-      const secretKey = process.env.NEXT_PUBLIC_API_URL;
-  
-      return fetch(`${secretKey}/register/`, {
+    name: nameRef.current?.value,
+    email: emailRef.current?.value,
+    password: passwordRef.current?.value,
 
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+  }
+
+  const onSubmit = (event: FormEvent<HTMLFormElement>): void => {
+      
+      event.preventDefault();
+
+      fetchData();
+
+  };
+
+  const { mutate } = regMutation(params);
+
+  const fetchData = ():void => {
+
+    params.name = nameRef.current?.value;
+    params.email = emailRef.current?.value;
+    params.password = passwordRef.current?.value;
+
+    const validateEmail: boolean = emailValidator(params.email);
+
+    const validatePassword: boolean = passwordValidator(params.password);
+
+    const comparePassword: boolean = passwordComparison(params.password, confirmPasswordRef.current?.value);
+
+    setPasswordSim(!comparePassword);
+
+    if(validateEmail && validatePassword){
+
+      mutate(params, {
+
+        onSuccess: async () => {
+
+          changeFn('login');
+
         },
-        body: JSON.stringify(params),
-        
-      }).then((res) => {
+        onError: (error) => {
 
-        if (res.ok) {
+          console.log(error);
 
-          return res.json();
-
-        } else {
-
-          throw new Error('Registration failed');
-
-        }
+        },
       });
 
-    });
+    }else if(!validateEmail && !validatePassword){
 
+      setEmailError(true);
 
-    const onSubmit = (event: FormEvent<HTMLFormElement>): void => {
-        
-        event.preventDefault();
+      setPasswordError(true);
 
-        fetchData();
+    }else if(!validatePassword){
 
-    };
+      setPasswordError(true);
 
-    const fetchData = ():void => {
+    }else{
 
-        const params: Params = {
+      setEmailError(true);
 
-            name: nameRef.current?.value,
-            email: emailRef.current?.value,
-            password: passwordRef.current?.value,
+    }
+  };
 
-        }
+  return (
 
-        const validateEmail: boolean = emailValidator(emailRef.current?.value);
+    <Template
+        changeFn={changeFn}
+        onSubmit={onSubmit}
+        nameRef={nameRef}
+        emailRef={emailRef}
+        passwordRef={passwordRef}
+        confirmPasswordRef={confirmPasswordRef}
+        emailError={emailError}
+        passwordError={passwordError}
+        passwordSim={passwordSim}
+    />
 
-        const validatePassword: boolean = passwordValidator(passwordRef.current?.value);
-
-        const comparePassword: boolean = passwordComparison(passwordRef.current?.value, confirmPasswordRef.current?.value);
-
-        comparePassword ? setPasswordSim(false) : setPasswordSim(true);
-
-        if(validateEmail && validatePassword){
-
-            registerMutation.mutate(params);
-
-        }else if(!validateEmail && !validatePassword){
-
-            setEmailError(true);
-
-            setPasswordError(true);
-
-        }else if(!validatePassword){
-
-            setPasswordError(true);
-
-        }else{
-
-            setEmailError(true);
-
-        }
-    };
-
-    return (
-
-        <Template
-            changeFn={changeFn}
-            onSubmit={onSubmit}
-            nameRef={nameRef}
-            emailRef={emailRef}
-            passwordRef={passwordRef}
-            confirmPasswordRef={confirmPasswordRef}
-            emailError={emailError}
-            passwordError={passwordError}
-            passwordSim={passwordSim}
-        />
-
-    )
+  )
 }
 
 export default Register

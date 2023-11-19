@@ -1,7 +1,7 @@
 import React, { FormEvent, useRef } from 'react'
 import Template from './pageTemplate'
 import { useRouter } from 'next/navigation'
-import { useMutation } from 'react-query'
+import { loginMutation } from '@/app/services/mutationReg.service';
 
 interface LoginProps {
 
@@ -22,57 +22,43 @@ const Login: React.FC<LoginProps> = ({ changeFn }) => {
     const passwordRef = useRef<HTMLInputElement>(null);
     const router = useRouter();
 
-    const loginMutation = useMutation((params: Params) => {
+    const params: Params = {
+            
+      email: emailRef.current?.value,
+      password: passwordRef.current?.value,
 
-      const secretKey = process.env.NEXT_PUBLIC_API_URL;
-  
-      return fetch(`${secretKey}/login/`, {
+    };
 
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(params),
-        
-      }).then((res) => {
-
-        if (res.ok) {
-
-          return res.json();
-
-        } else {
-
-          throw new Error('Invalid login');
-          
-        }
-      });
-    });
+    const { mutate } = loginMutation(params);
 
     const onSubmit = (event: FormEvent<HTMLFormElement>):void => {
 
-        event.preventDefault();
+      event.preventDefault();
 
-        fetchProfile();
+      fetchProfile();
 
     };
 
     const fetchProfile = ():void => {
 
-        const params: Params = {
-            
-            email: emailRef.current?.value,
-            password: passwordRef.current?.value,
+      params.email = emailRef.current?.value;
+      params.password = passwordRef.current?.value;
 
-        }
+      mutate(params, {
+        onSuccess: async (data) => {
 
-        loginMutation.mutate(params);
+          let info = await data.json();
 
-        if (loginMutation.isSuccess) {
+          console.log(info.token.access);
+          router.push('/joblist');
 
-            console.log(loginMutation.data?.token.access);
-            router.push('/joblist');
+        },
+        onError: (error) => {
 
-        }
+          console.log(error);
+
+        },
+      });
     };
 
     return (
